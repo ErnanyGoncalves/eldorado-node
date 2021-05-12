@@ -3,6 +3,9 @@ const cors = require("cors");
 const bodyParser = require('body-parser');
 const sequelize = require("./database");
 
+const categoryRoutes = require('./routes/category-routes');
+const deviceRoutes = require('./routes/device-routes');
+
 const Category = require("./models/category");
 const Device = require("./models/device");
 
@@ -12,10 +15,13 @@ app.use(cors());
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
 
+app.use(categoryRoutes);
+app.use(deviceRoutes);
+
 sequelize.query("CREATE DATABASE IF NOT EXISTS eldoradodb")
     .then(() => {
         sequelize.authenticate()
-            .then(()=>{
+            .then(() => {
                 sequelize.query("USE eldoradodb")
             })
             .then(() => {
@@ -23,6 +29,7 @@ sequelize.query("CREATE DATABASE IF NOT EXISTS eldoradodb")
             })
             .then(() => {
                 sequelize.sync().then(() => {
+
                     app.listen(8000, () => {
                         console.log("Connected to localhost:8000");
                     });

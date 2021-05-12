@@ -13,7 +13,7 @@ const Category = sequelize.define('category', {
         type: Sequelize.STRING(128),
         allowNull: false
     }
-},{
+}, {
     timestamps: false,
     onDelete: 'cascade'
 });
