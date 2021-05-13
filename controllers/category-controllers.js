@@ -1,25 +1,14 @@
-const Category = require("../models/category");
-const sequelize = require("../database");
-exports.getCategories = (req, res, next) => {
-    console.log(sequelize);
-    const categories = Category.findAll()
-        .then(res => console.log(res[0].dataValues))
-        .catch(err => console.log(err));
-};
+const express = require("express");
 
-exports.createCategory = (req, res, next) => {
+const categoryController = require('../services/category-services');
 
-    const { name } = req.body;
+const app = express();
 
-    Category.create({ name })
-        .then(res => res.send("New category created!"))
-        .catch(err => console.log(err));
-};
+app.route("/category")
+    .get(categoryController.getCategories) //Listagem
+    .post(categoryController.createCategory) // Cadastro
 
-exports.deleteCategory = (req, res, next) => {
-    const paramId = req.params.id;
+app.route("/category/:id")
+    .delete(categoryController.deleteCategory); // Exclusão
 
-    Category.destroy({ where: { id: paramId } })
-        .then(res => res.send("Category", paramId, "deleted!"))
-        .catch(err => console.log(err));
-};
+module.exports = app;

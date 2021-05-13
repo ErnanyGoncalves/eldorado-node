@@ -1,23 +1,15 @@
-const Device = require("../models/device");
+const express = require("express");
 
-exports.getDevices = (req, res, next) => {
+const deviceController = require('../services/device-services');
 
-    const devices = Device.findAll()
-        .then(res => console.log(res[0].dataValues))
-        .catch(err => console.log(err));
-};
+const app = express();
 
-exports.createDevice = (req, res, next) => {
-    const { color, partNumber, categoryId } = req.body;
+app.route("/device")
+    .get(deviceController.getDevices) //Listagem
+    .post(deviceController.createDevice) // Cadastro
+  
 
-    Device.create({ color, partNumber, categoryId })
-        .then(res => res.send("New device created!"))
-        .catch(err => console.log(err));
-};
+app.route("/device/:id")
+    .delete(deviceController.deleteDevice); // Exclusão
 
-exports.deleteDevice = (req, res, next) => {
-    const paramId = req.params.id;
-    Device.destroy({ where: { id: paramId } })
-        .then(res => res.send("Device", paramId, "deleted!"))
-        .catch(err => console.log(err));
-};
+module.exports = app;

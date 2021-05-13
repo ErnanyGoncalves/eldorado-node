@@ -5,21 +5,23 @@ const { Sequelize } = require('sequelize');
 
 module.exports = db = {};
 
-initialize();
+const initialize = () => {
 
-async function initialize() {
-
-    const connection = await mysql.createConnection({ host: "localhost", user: "root", password: "root-admin" });
-    await connection.query("CREATE DATABASE IF NOT EXISTS eldoradodb");
-
-    const sequelize = new Sequelize('eldoradodb', 'root', 'root-admin', {
-        host: 'localhost',
-        dialect: "mysql",
-    });
-
-    db.Category = require("./models/category")(sequelize);
-    db.Device = require("./models/device")(sequelize);
-    db.Category.hasMany(db.Device);
+    mysql.createConnection({ host: "localhost", user: "root", password: "root-admin" })
+    .then((connection)=>{
+        
+        connection.query("CREATE DATABASE IF NOT EXISTS eldoradodb");
+        const sequelize = new Sequelize('eldoradodb', 'root', 'root-admin', {
+            host: 'localhost',
+            dialect: "mysql",
+        });
     
-    await sequelize.sync();
+        db.Category = require("./models/category")(sequelize);
+        db.Device = require("./models/device")(sequelize);
+        db.Category.hasMany(db.Device);
+        sequelize.sync();
+    }) 
+    
 }
+
+initialize();
