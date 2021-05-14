@@ -1,9 +1,14 @@
 const db = require("../database");
 
 exports.getCategories = (req, res, next) => {
-    db.Category.findAll()
-        .then(response => res.send(response))
-        .catch(err => console.log(err));
+    //db.Category.findAll()
+        
+    db.sequelize.query(`SELECT *, (SELECT GROUP_CONCAT(device.partNumber SEPARATOR ';')
+    FROM devices as device WHERE category.id = device.categoryId
+    GROUP BY category.id 
+    ) AS listOfDevices FROM categories AS category `)
+    .then(response => res.send(response))
+    .catch(err => console.log(err));
 };
 
 exports.createCategory = (req, res, next) => {

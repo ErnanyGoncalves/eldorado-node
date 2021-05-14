@@ -19,6 +19,7 @@ const initialize = () => {
         db.Category = require("./models/category")(sequelize);
         db.Device = require("./models/device")(sequelize);
         db.Category.hasMany(db.Device);
+        db.sequelize = sequelize;
         sequelize.sync();
     }) 
     
