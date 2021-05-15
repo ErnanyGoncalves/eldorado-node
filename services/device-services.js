@@ -14,6 +14,7 @@ exports.getDevices = (req, res, next) => {
         }
     })
     */
+   
     db.sequelize.query(`SELECT id, color,partNumber, categoryId, (
         SELECT name from categories AS category WHERE device.categoryId = category.id
     ) as categoryName FROM devices AS device`)
