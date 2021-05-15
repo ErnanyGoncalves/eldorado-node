@@ -9,7 +9,7 @@ exports.getCategories = (req, res, next) => {
     ) AS listOfDevices FROM categories AS category`)
         .then(response => {
             const arrayDevicePerCategory = response[0].map(({ listOfDevices }) => listOfDevices != null ? listOfDevices.split(";").sort() : null);
-            response[0].map((v,i)=>v.listOfDevices = arrayDevicePerCategory[i]);
+            response[0].map((v, i) => v.listOfDevices = arrayDevicePerCategory[i]);
             res.send(response[0]);
         })
         .catch(err => console.log(err));
@@ -27,6 +27,6 @@ exports.deleteCategory = (req, res, next) => {
     const paramId = req.params.id;
 
     db.Category.destroy({ where: { id: paramId } })
-        .then(() => res.send("Deleted!"))
+        .then(() => res.send({ paramId }))
         .catch(err => console.log(err));
 };

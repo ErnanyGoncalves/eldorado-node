@@ -14,11 +14,11 @@ exports.getDevices = (req, res, next) => {
         }
     })
     */
-   
+
     db.sequelize.query(`SELECT id, color,partNumber, categoryId, (
         SELECT name from categories AS category WHERE device.categoryId = category.id
     ) as categoryName FROM devices AS device`)
-        .then(response => { console.log(response); res.send(response) })
+        .then(response => {res.send(response[0]) })
         .catch(err => console.log(err));
 };
 
@@ -34,6 +34,6 @@ exports.deleteDevice = (req, res, next) => {
     const paramId = req.params.id;
 
     db.Device.destroy({ where: { id: paramId } })
-        .then(() => res.send("Deleted!"))
+        .then(() => res.send({paramId}))
         .catch(err => console.log(err));
 };
